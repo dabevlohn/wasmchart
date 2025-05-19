@@ -1,6 +1,6 @@
 use charming::{component::Axis, element::AxisType, series::Bar, Chart, WasmRenderer};
-//use duckdb::{params, Connection, Result};
 use serde::{Deserialize, Serialize};
+use wasm_bindgen::prelude::*;
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct PageHit {
@@ -8,7 +8,9 @@ pub struct PageHit {
     value: i32,
 }
 
-pub fn getparqdata() -> Vec<PageHit> {
+#[wasm_bindgen]
+pub fn chart(url: &str) {
+    let _bb = getParqData(url);
     let mut data: Vec<PageHit> = vec![];
     data.push(PageHit {
         path: "Mon".to_string(),
@@ -38,26 +40,27 @@ pub fn getparqdata() -> Vec<PageHit> {
         path: "Sun".to_string(),
         value: 130,
     });
-    data
-}
 
-pub fn chart() -> Chart {
-    let data = getparqdata();
     let mut yy: Vec<String> = vec![];
     let mut xx: Vec<i32> = vec![];
     for d in data {
         yy.push(d.path);
         xx.push(d.value);
     }
-    Chart::new()
+    let chart = Chart::new()
         .y_axis(Axis::new().type_(AxisType::Category).data(yy))
         .x_axis(Axis::new().type_(AxisType::Value))
-        .series(Bar::new().data(xx))
-}
+        .series(Bar::new().data(xx));
 
-fn main() {
-    let chart = chart();
     let renderer = WasmRenderer::new(1000, 800);
     // Render the chart in the WebAssembly runtime
     renderer.render("my-chart-id", &chart).unwrap();
+}
+
+#[wasm_bindgen]
+extern "C" {
+    pub fn getParqData(s: &str);
+
+    #[wasm_bindgen(js_namespace = console)]
+    pub fn log(s: &str);
 }

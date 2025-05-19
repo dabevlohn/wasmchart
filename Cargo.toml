@@ -3,10 +3,12 @@ name = "chart-test"
 version = "0.1.0"
 edition = "2024"
 
+[lib]
+crate-type = ["cdylib", "rlib"]
+
 [dependencies]
-#arrow = "=53.2.0"
-#chrono = "=0.4.38"
-#duckdb = { version = "0.9.2", features = ["bundled", "parquet"] }
 charming = { version = "0.5.0", features = ["wasm", "wasm-bindgen"] }
 serde = { version = "1.0.218", features = ["derive"] }
 serde_json = "1.0.140"
+wasm-bindgen = "0.2.100"
+wasm-bindgen-futures = "0.4.50"

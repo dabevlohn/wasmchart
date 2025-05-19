@@ -1,13 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
-<head>
-  <meta charset="utf-8" />
-  <title>Yew App</title>
-  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/echarts-gl@2.0.9/dist/echarts-gl.min.js"></script>
-</head>
-<body>
-  <div id="my-chart-id"></div>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>Yew App</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts-gl@2.0.9/dist/echarts-gl.min.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      async function getParqData(url) {
+        const resp = await fetch(url);
+        const bytes = new Uint8Array(await resp.arrayBuffer());
+        return bytes;
+      }
+    </script>
+    <script type="module">
+      import init, { chart } from "./pkg/chart_test.js";
+      init().then(() => {
+        chart(
+          "https://sib.tara.bar/81aaa5c3b0f482daa47353937e4b6c96/pathcounts0.parquet",
+        );
+      });
+    </script>
+    <div id="my-chart-id"></div>
+  </body>
 </html>
