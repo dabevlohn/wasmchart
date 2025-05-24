@@ -1,4 +1,11 @@
-use charming::{component::Axis, element::AxisType, series::Bar, Chart, WasmRenderer};
+use charming::{
+    component::Axis,
+    element::{AxisType, Color},
+    series::Bar,
+    Chart, WasmRenderer,
+};
+//use polars::prelude::*;
+//use std::io::Cursor;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
@@ -9,8 +16,12 @@ pub struct PageHit {
 }
 
 #[wasm_bindgen]
-pub fn chart(url: &str) {
-    let _bb = getParqData(url);
+pub fn chart(_url: &str) {
+    //let bb = getParqData(url);
+    //let reader = Cursor::new(&bb);
+    //let result = ParquetReader::new(reader).finish().unwrap();
+    //let a = result.select(["foo"]);
+    //log(&format!("{:?}", a));
     let mut data: Vec<PageHit> = vec![];
     data.push(PageHit {
         path: "Mon".to_string(),
@@ -50,7 +61,11 @@ pub fn chart(url: &str) {
     let chart = Chart::new()
         .y_axis(Axis::new().type_(AxisType::Category).data(yy))
         .x_axis(Axis::new().type_(AxisType::Value))
-        .series(Bar::new().data(xx));
+        .series(
+            Bar::new()
+                .data(xx)
+                .item_style(Color::Value("#337777".to_string())),
+        );
 
     let renderer = WasmRenderer::new(1000, 800);
     // Render the chart in the WebAssembly runtime
@@ -59,7 +74,7 @@ pub fn chart(url: &str) {
 
 #[wasm_bindgen]
 extern "C" {
-    pub fn getParqData(s: &str);
+    pub fn getParqData(s: &str) -> Vec<u8>;
 
     #[wasm_bindgen(js_namespace = console)]
     pub fn log(s: &str);
